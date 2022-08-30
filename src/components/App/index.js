@@ -36,7 +36,7 @@ function App() {
         todayHandler={todayHandler}
         nextHandler={nextHandler}
       />
-      <Grid startDay={startDay} />
+      <Grid startDay={startDay} today={today}/>
     </ShadowWrapper>
   );
 }
