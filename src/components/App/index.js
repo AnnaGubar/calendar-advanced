@@ -1,42 +1,36 @@
 import moment from "moment";
+import styled from "styled-components";
 import { Grid } from "../Grid";
 import { Header } from "../Header";
 import { Monitor } from "../Monitor";
 
+const ShadowWrapper = styled("div")`
+  border-top: 1px solid #737374;
+  border-left: 1px solid #464648;
+  border-right: 1px solid #464648;
+  border-bottom: 2px solid #464648;
+
+  border-radius: 8px;
+  overflow: hidden;
+`;
+
 function App() {
-  // чтобы работать в devTools а не через console.log(moment())
-  // можно напрямую вызывать методы библиотеки moment (moment().startOf("month"))
-  window.moment = moment;
-
+  const today = moment()
   // c какого дня в календаре начинается первая неделя месяца (разметка)
-  const startDay = moment().startOf("month").startOf("week");
+  const startDay = today.clone().startOf("month").startOf("week");
   // каким днем в календаре заканчивается последняя неделя месяца (разметка)
-  const endDay = moment().endOf("month").endOf("week");
+  // const endDay = moment().endOf("month").endOf("week");
 
-  // можно преобразовать в любой формат методом .format()
-  // console.log(endDay.format("YYYY-MM-DD")) // 2022-09-03
-
-  // месяц для отрисовки (актуальный и дни с пред/след месяцев)
-  const calendar = [];
-
-  // clone() - чтобы не мутировать startDay
-  const day = startDay.clone();
-
-  // пока day !== endDay
-  while (!day.isAfter(endDay)) {
-    // будут добавляться в calendar один и тот же день
-    // calendar.push(day);
-    calendar.push(day.clone());
-    day.add(1, "day"); // типа i++
-  }
 
   return (
-    <div>
+    <ShadowWrapper>
       <Header />
-      <Monitor />
-      <Grid startDay={startDay}/>
-    </div>
+      <Monitor today={today}/>
+      <Grid startDay={startDay} />
+    </ShadowWrapper>
   );
 }
 
 export default App;
+
+

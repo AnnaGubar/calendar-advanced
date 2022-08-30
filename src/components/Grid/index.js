@@ -31,6 +31,8 @@ const DayWrapper = styled.div`
 const Grid = ({ startDay }) => {
   // разметка - максимально 6 недель по 7 дней
   const TOTAL_DAYS = 42;
+  
+  // clone() - чтобы не мутировать startDay
   // const day = startDay.clone().subtract(1,"day");
   const day = startDay.clone();
 
