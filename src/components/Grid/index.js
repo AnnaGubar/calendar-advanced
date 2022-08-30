@@ -1,3 +1,4 @@
+import moment from "moment";
 import styled from "styled-components";
 
 const GridWrapper = styled.div`
@@ -26,34 +27,50 @@ const DayWrapper = styled.div`
   align-items: center;
   height: 33px;
   width: 33px;
+  margin: 2px;
+`;
+
+const CurrentDay = styled("div")`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f00;
+  border-radius: 50%;
 `;
 
 const Grid = ({ startDay }) => {
   // разметка - максимально 6 недель по 7 дней
   const TOTAL_DAYS = 42;
-  
+
   // clone() - чтобы не мутировать startDay
   // const day = startDay.clone().subtract(1,"day");
   const day = startDay.clone();
 
   // смещаем индекс на +1 что бы неделя начиналась с Пн
-  const daysArray = [...Array(TOTAL_DAYS)].map(() => day.add(1, "day").clone());
+  const daysMap = [...Array(TOTAL_DAYS)].map(() => day.add(1, "day").clone());
+
+  const isCurrentDay = (day) => moment().isSame(day,"day");
 
   return (
     <GridWrapper>
-
-      {daysArray.map((dayItem) => (
-        <CellWrapper key={dayItem.format("DDMMYYYY")} isWeekend={dayItem.day()===6 || dayItem.day()===0 }>
+      {daysMap.map((dayItem) => (
+        <CellWrapper
+          key={dayItem.format("DDMMYYYY")}
+          isWeekend={dayItem.day() === 6 || dayItem.day() === 0}
+        >
           <RowInCellWrapper justifyContent={"flex-end"}>
             <DayWrapper>
-
-              {dayItem.format("D")}
-
+              {!isCurrentDay(dayItem) ? (
+                dayItem.format("D")
+              ) : (
+                <CurrentDay>{dayItem.format("D")}</CurrentDay>
+              )}
             </DayWrapper>
           </RowInCellWrapper>
         </CellWrapper>
       ))}
-
     </GridWrapper>
   );
 };
