@@ -21,7 +21,7 @@
 
 - метод **moment(дата).isSame(дата, что сравнить)** - поиск текущей даты
   - `moment("2010-10-20").isSame("2010-10-20", "year")` - true
-- методы **format add subtract**
+- методы **format, add, subtract**:
   - `moment().format("DD-MM-YYYY")` - желаемый формат даты
   - `moment().add(1, "day")` - следующий день
   - `moment().subtract(1,"month")` - прошлый месяц

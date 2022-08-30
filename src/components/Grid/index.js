@@ -4,14 +4,14 @@ import styled from "styled-components";
 const GridWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(6, 1fr);
   grid-gap: 1px;
-  background-color: #404040;
+  background-color: ${(props) => (props.isHeader ? "#1e1f21" : "#404040")};
+  ${(props) => props.isHeader && "border-bottom:1px solid #404040"}
 `;
 
 const CellWrapper = styled.div`
   min-width: 140px;
-  min-height: 80px;
+  min-height: ${(props) => (props.isHeader ? 24 : 80)}px;
   background-color: ${(props) => (props.isWeekend ? "#272829" : "#1e1f21")};
   color: #dddcdd;
 `;
@@ -20,6 +20,7 @@ const RowInCellWrapper = styled.div`
   display: flex;
   justify-content: ${(props) =>
     props.justifyContent ? props.justifyContent : "flex-start"};
+  ${(props) => props.pr && `padding-right:${props.pr*8}px`}; // пропс pr={1} отступ(1*8)px
 `;
 const DayWrapper = styled.div`
   display: flex;
@@ -51,27 +52,40 @@ const Grid = ({ startDay }) => {
   // смещаем индекс на +1 что бы неделя начиналась с Пн
   const daysMap = [...Array(TOTAL_DAYS)].map(() => day.add(1, "day").clone());
 
-  const isCurrentDay = (day) => moment().isSame(day,"day");
+  const isCurrentDay = (day) => moment().isSame(day, "day");
 
   return (
-    <GridWrapper>
-      {daysMap.map((dayItem) => (
-        <CellWrapper
-          key={dayItem.unix()}
-          isWeekend={dayItem.day() === 6 || dayItem.day() === 0}
-        >
-          <RowInCellWrapper justifyContent={"flex-end"}>
-            <DayWrapper>
-              {!isCurrentDay(dayItem) ? (
-                dayItem.format("D")
-              ) : (
-                <CurrentDay>{dayItem.format("D")}</CurrentDay>
-              )}
-            </DayWrapper>
-          </RowInCellWrapper>
-        </CellWrapper>
-      ))}
-    </GridWrapper>
+    <>
+      <GridWrapper isHeader>
+        {[...Array(7)].map((_, index) => (
+          <CellWrapper isHeader key={index}>
+            <RowInCellWrapper justifyContent={"flex-end"} pr={1}>
+              {/* index+1 - чтобы начало недели было с Пн */}
+              {moment().day(index+1).format("ddd")}
+            </RowInCellWrapper>
+          </CellWrapper>
+        ))}
+      </GridWrapper>
+
+      <GridWrapper>
+        {daysMap.map((dayItem) => (
+          <CellWrapper
+            key={dayItem.unix()}
+            isWeekend={dayItem.day() === 6 || dayItem.day() === 0}
+          >
+            <RowInCellWrapper justifyContent={"flex-end"}>
+              <DayWrapper>
+                {!isCurrentDay(dayItem) ? (
+                  dayItem.format("D")
+                ) : (
+                  <CurrentDay>{dayItem.format("D")}</CurrentDay>
+                )}
+              </DayWrapper>
+            </RowInCellWrapper>
+          </CellWrapper>
+        ))}
+      </GridWrapper>
+    </>
   );
 };
 
