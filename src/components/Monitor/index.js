@@ -25,6 +25,7 @@ const ButtonWrapper = styled("button")`
   border: none;
   color: #e6e6e6;
   background-color: #565759;
+  cursor: pointer;
 `;
 
 const TodayButtonWrapper = styled(ButtonWrapper)`
@@ -32,7 +33,7 @@ const TodayButtonWrapper = styled(ButtonWrapper)`
   font-weight: bold;
 `;
 
-const Monitor = ({ today }) => {
+const Monitor = ({ today, prevHandler, todayHandler, nextHandler }) => {
   return (
     <DivWrapper>
       <div>
@@ -40,9 +41,9 @@ const Monitor = ({ today }) => {
         <TextWrapper>{today.format("YYYY")}</TextWrapper>
       </div>
       <div>
-        <ButtonWrapper>&lt;</ButtonWrapper>
-        <TodayButtonWrapper>Today</TodayButtonWrapper>
-        <ButtonWrapper>&gt;</ButtonWrapper>
+        <ButtonWrapper onClick={prevHandler}>&lt;</ButtonWrapper>
+        <TodayButtonWrapper onClick={todayHandler}>Today</TodayButtonWrapper>
+        <ButtonWrapper onClick={nextHandler}>&gt;</ButtonWrapper>
       </div>
     </DivWrapper>
   );

@@ -1,6 +1,6 @@
 `npm i moment` - для работы с датой
 
-`window.moment = moment;` - можно напрямую в devTools вызывать методы библиотеки moment (moment().startOf("month"))
+`window.moment = moment` - напрямую в devTools вызывает методы библиотеки moment (moment().startOf("month"))
 
 ---
 
@@ -19,5 +19,9 @@
 7. Затянули данные текущей даты в календарь
 8. Реализация контроллеров кнопки Today
 
-- **метод moment(дата).isSame(дата, что сравнить)** - поиск текущей даты
-  - `moment("2010-10-20").isSame("2010-10-20", "year") ` - true
+- метод **moment(дата).isSame(дата, что сравнить)** - поиск текущей даты
+  - `moment("2010-10-20").isSame("2010-10-20", "year")` - true
+- методы **format add subtract**
+  - `moment().format("DD-MM-YYYY")` - желаемый формат даты
+  - `moment().add(1, "day")` - следующий день
+  - `moment().subtract(1,"month")` - прошлый месяц

@@ -57,7 +57,7 @@ const Grid = ({ startDay }) => {
     <GridWrapper>
       {daysMap.map((dayItem) => (
         <CellWrapper
-          key={dayItem.format("DDMMYYYY")}
+          key={dayItem.unix()}
           isWeekend={dayItem.day() === 6 || dayItem.day() === 0}
         >
           <RowInCellWrapper justifyContent={"flex-end"}>

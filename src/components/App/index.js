@@ -1,4 +1,5 @@
 import moment from "moment";
+import { useState } from "react";
 import styled from "styled-components";
 import { Grid } from "../Grid";
 import { Header } from "../Header";
@@ -15,22 +16,29 @@ const ShadowWrapper = styled("div")`
 `;
 
 function App() {
-  const today = moment()
+  const [today, setToday] = useState(moment());
+
   // c какого дня в календаре начинается первая неделя месяца (разметка)
   const startDay = today.clone().startOf("month").startOf("week");
   // каким днем в календаре заканчивается последняя неделя месяца (разметка)
   // const endDay = moment().endOf("month").endOf("week");
 
+  const prevHandler = () => {setToday(prev=>prev.clone().subtract(1,"month"))};
+  const todayHandler = () => {setToday(moment())};
+  const nextHandler = () => {setToday(prev=>prev.clone().add(1,"month"))};
 
   return (
     <ShadowWrapper>
       <Header />
-      <Monitor today={today}/>
+      <Monitor
+        today={today}
+        prevHandler={prevHandler}
+        todayHandler={todayHandler}
+        nextHandler={nextHandler}
+      />
       <Grid startDay={startDay} />
     </ShadowWrapper>
   );
 }
 
 export default App;
-
-
