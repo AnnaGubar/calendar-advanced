@@ -1,5 +1,7 @@
 import moment from "moment";
-import "./App.css";
+import { Grid } from "../Grid";
+import { Header } from "../Header";
+import { Monitor } from "../Monitor";
 
 function App() {
   // чтобы работать в devTools а не через console.log(moment())
@@ -28,7 +30,13 @@ function App() {
     day.add(1, "day"); // типа i++
   }
 
-  return <div></div>;
+  return (
+    <div>
+      <Header />
+      <Monitor />
+      <Grid startDay={startDay}/>
+    </div>
+  );
 }
 
 export default App;
