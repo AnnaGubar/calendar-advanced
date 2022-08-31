@@ -122,7 +122,6 @@ const Grid = ({ startDay, today, events }) => {
 
               {/* заметки */}
               <EventListWrapper>
-                {/* <div>{dayItem.format("X")}</div> */}
                 {events
                   .filter(
                     (event) =>
@@ -134,7 +133,6 @@ const Grid = ({ startDay, today, events }) => {
                       <EventItemWrapper>
                       {event.title}</EventItemWrapper></li>
                   ))}
-                {/* <div>{dayItem.clone().endOf("day").format("X")}</div> */}
               </EventListWrapper>
 
             </RowInCellWrapper>

@@ -62,15 +62,8 @@
 
 - стилизация
 - определяем начало/конец дня
-
 ```
-              <div>
-              <div>{dayItem.format("X")}</div>
-              {events.filter(
-                (event) =>
-                  event.date >= dayItem.format("X") &&
-                  event.date <= dayItem.clone().endOf("day").format("X")
-              ).map(event=><div>{event.date}</div>)}
-              <div>{dayItem.clone().endOf("day").format("X")}</div>
-            </div>
+<div>{dayItem.format("X")}</div> {/* start */}
+<div>{moment().format("X")}</div> {/* current */}
+<div>{dayItem.clone().endOf("day").format("X")}</div> {/* end */}
 ```
