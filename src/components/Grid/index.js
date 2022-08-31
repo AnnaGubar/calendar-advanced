@@ -34,6 +34,7 @@ const DayWrapper = styled.div`
   height: 33px;
   width: 33px;
   margin: 2px;
+  cursor: pointer;
 `;
 
 const CurrentDay = styled("div")`
@@ -52,29 +53,28 @@ const ShowDayWpapper = styled("div")`
 `;
 
 const EventListWrapper = styled("ul")`
- margin: 0;
- padding-left: 4px;
- list-style-position: inside;
-
+  margin: 0;
+  padding-left: 4px;
+  list-style-position: inside;
 `;
 
 const EventItemWrapper = styled("button")`
-position: relative;
-left: -14px;
-margin: 0;
-padding: 0;
-width: 114px;
-text-align: left;
-text-overflow: ellipsis;
-overflow: hidden;
-white-space: nowrap;
-border: none;
-background: none;
-color: #DDD;
-cursor: pointer;
+  position: relative;
+  left: -14px;
+  margin: 0;
+  padding: 0;
+  width: 114px;
+  text-align: left;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  border: none;
+  background: none;
+  color: #ddd;
+  cursor: pointer;
 `;
 
-const Grid = ({ startDay, today, events }) => {
+const Grid = ({ startDay, today, events, openFormHandler }) => {
   // clone() - чтобы не мутировать startDay
   // const day = startDay.clone().subtract(1,"day");
   const day = startDay.clone();
@@ -106,12 +106,12 @@ const Grid = ({ startDay, today, events }) => {
           <CellWrapper
             key={dayItem.unix()}
             isWeekend={dayItem.day() === 6 || dayItem.day() === 0}
-            isCurrentMonth={isCurrentMonth(dayItem)}>
-
+            isCurrentMonth={isCurrentMonth(dayItem)}
+          >
             {/* сетка дней */}
             <RowInCellWrapper justifyContent={"flex-end"}>
               <ShowDayWpapper>
-                <DayWrapper>
+                <DayWrapper onDoubleClick={()=>openFormHandler("Create")}>
                   {!isCurrentDay(dayItem) ? (
                     dayItem.format("D")
                   ) : (
@@ -130,11 +130,10 @@ const Grid = ({ startDay, today, events }) => {
                   )
                   .map((event) => (
                     <li key={event.id}>
-                      <EventItemWrapper>
-                      {event.title}</EventItemWrapper></li>
+                      <EventItemWrapper onDoubleClick={()=>openFormHandler("Update",event)}>{event.title}</EventItemWrapper>
+                    </li>
                   ))}
               </EventListWrapper>
-
             </RowInCellWrapper>
           </CellWrapper>
         ))}

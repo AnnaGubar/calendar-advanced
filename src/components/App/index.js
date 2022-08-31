@@ -12,14 +12,54 @@ const ShadowWrapper = styled("div")`
   border-left: 1px solid #464648;
   border-right: 1px solid #464648;
   border-bottom: 2px solid #464648;
-
   border-radius: 8px;
   overflow: hidden;
 `;
 
+const FormPositionWrapper = styled("div")`
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.35);
+`;
+
+const FormWrapper = styled(ShadowWrapper)`
+  width: 200px;
+  background-color: #1e1f21;
+  color: #ddd;
+  /* box-shadow: none; */
+`;
+
+const EventTitle = styled("input")`
+padding: 4px 14px;
+width: 100%;
+font-size: .85rem;
+outline: none;
+border: none;
+border-bottom: 1px solid #464648;
+background-color: #1E1F21;
+color: #DDD;
+`;
+
+const EventBody = styled(EventTitle)`
+
+`;
+
+const ButtonsWrapper = styled("div")`
+display: flex;
+justify-content: flex-end;
+padding: 8px 14px;
+`;
+
 function App() {
   window.moment = moment;
-  // определение и отображение выбранного месяца с неактивными днями пред/след месяцев
+  // ◼ определение и отображение выбранного месяца с неактивными днями пред/след месяцев
   const [today, setToday] = useState(moment());
   const startDay = today.clone().startOf("month").startOf("week");
 
@@ -33,7 +73,7 @@ function App() {
     setToday((prev) => prev.clone().add(1, "month"));
   };
 
-  // работа с заметками: поиск, фильтрация
+  // ◼ работа с заметками: поиск, фильтрация
   const [events, setEvents] = useState([]);
   const startDayQwery = startDay.clone().format("X");
   const endDayQwery = startDay.clone().add(TOTAL_DAYS, "days").format("X"); // конец разметочного месяца
@@ -52,19 +92,67 @@ function App() {
     // отображает заметки в зависимости от today (today меняется из-за переключения кнопок prev/next)
   }, [endDayQwery, startDayQwery, today]);
 
+  // ◼ модальное окно для заметок/дат
+  const [event, setEvent] = useState(null);
+  const [method, setMethod] = useState(null);
+  const [isShowForm, setShowForm] = useState(false);
+  // добавив/редактировав дату будет отображаться текущее время
+  const defaultEvent={
+    title:"",
+    description:"",
+    date:moment().format("X"),
+  }
+
+  const openFormHandler = (methodName, eventForUpdate) => {
+    setShowForm(true);
+    setMethod(methodName);
+    setEvent(eventForUpdate||defaultEvent);
+  };
+
+  const closeFormHandler=()=>{
+    setShowForm(false);
+    setEvent(null);
+  }
+
+  const changeEventHandler=(text,field)=>{
+    setEvent(prev=>({...prev,[field]:text}));
+  }
+
   return (
-    <ShadowWrapper>
-      <Header />
+    <>
+      {isShowForm && (
+        <FormPositionWrapper onClick={closeFormHandler}>
+          <FormWrapper onClick={e=>e.stopPropagation()}>
+            <EventTitle value={event.title} onChange={e=>changeEventHandler(e.target.value,"title")}/>
+            <EventBody value={event.description} onChange={e=>changeEventHandler(e.target.value,"description")}/>
+            <ButtonsWrapper>
+              <button onClick={closeFormHandler}>Cancel</button>
+              <button>{method}</button>
+              </ButtonsWrapper>
+            </FormWrapper>
+        </FormPositionWrapper>
+      )}
 
-      <Monitor
-        today={today}
-        prevHandler={prevHandler}
-        todayHandler={todayHandler}
-        nextHandler={nextHandler}
-      />
+      <ShadowWrapper>
 
-      <Grid startDay={startDay} today={today} events={events}/>
-    </ShadowWrapper>
+        <Header />
+
+        <Monitor
+          today={today}
+          prevHandler={prevHandler}
+          todayHandler={todayHandler}
+          nextHandler={nextHandler}
+        />
+
+        <Grid
+          startDay={startDay}
+          today={today}
+          events={events}
+          openFormHandler={openFormHandler}
+        />
+
+      </ShadowWrapper>
+    </>
   );
 }
 

@@ -67,3 +67,15 @@
 <div>{moment().format("X")}</div> {/* current */}
 <div>{dayItem.clone().endOf("day").format("X")}</div> {/* end */}
 ```
+15. модальное окно для заметки/дня (openFormHandler) `onDoubleClick`
+- запрет на всплытие событий `e.stopPropagation()`
+  - eventHandler выполняется на Ancestor и Child но игнорирует Parent
+```
+<Ancestor onClick={eventHandler}>
+  <Parent onClick={e=>e.stopPropagation()}>
+   <Child>
+       <button onClick={eventHandler}>Close</button>
+    </Child>
+  </Parent>
+</Ancestor>
+```
