@@ -20,9 +20,11 @@
 8. Реализация контроллеров кнопки Today
 
 - метод **moment(дата).isSame(дата, что сравнить)** - поиск текущей даты
+
   - `moment("2010-10-20").isSame("2010-10-20", "year")` - true
 
 - методы **format, add, subtract, clone, startOf, endOf**:
+
   - `moment().format("DD-MM-YYYY")` - желаемый формат даты
   - `moment().add(1, "day")` - следующий день
   - `moment().subtract(1,"month")` - прошлый месяц
@@ -62,14 +64,18 @@
 
 - стилизация
 - определяем начало/конец дня
+
 ```
 <div>{dayItem.format("X")}</div> {/* start */}
 <div>{moment().format("X")}</div> {/* current */}
 <div>{dayItem.clone().endOf("day").format("X")}</div> {/* end */}
 ```
+
 15. модальное окно для заметки/дня (openFormHandler) `onDoubleClick`
+
 - запрет на всплытие событий `e.stopPropagation()`
   - eventHandler выполняется на Ancestor и Child но игнорирует Parent
+
 ```
 <Ancestor onClick={eventHandler}>
   <Parent onClick={e=>e.stopPropagation()}>
@@ -77,11 +83,16 @@
   </Parent>
 </Ancestor>
 ```
+
 16. Отправляем добавленную/отредактированную заметку в БД
-  - создание `POST запроса` - добавление заметки
-  ```
+
+- создание `POST запроса` - добавление заметки
+
+```
 fetch(fetchUrl, {
-  method: httpMethod,
-  headers: { "Content-Type": "application/json" }, // без этого не создается тело
-  body: JSON.stringify(event)})
-  ```
+method: httpMethod,
+headers: { "Content-Type": "application/json" }, // без этого не создается тело
+body: JSON.stringify(event)})
+```
+
+17. Создаем кнопку удаления заметки

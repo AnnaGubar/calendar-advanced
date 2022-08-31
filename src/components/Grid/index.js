@@ -111,7 +111,7 @@ const Grid = ({ startDay, today, events, openFormHandler }) => {
             {/* сетка дней */}
             <RowInCellWrapper justifyContent={"flex-end"}>
               <ShowDayWpapper>
-                <DayWrapper onDoubleClick={()=>openFormHandler("Create")}>
+                <DayWrapper onDoubleClick={()=>openFormHandler("Create",null,dayItem)}>
                   {!isCurrentDay(dayItem) ? (
                     dayItem.format("D")
                   ) : (

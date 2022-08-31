@@ -30,14 +30,14 @@ const FormPositionWrapper = styled("div")`
 `;
 
 const FormWrapper = styled(ShadowWrapper)`
-  width: 200px;
+  width: 320px;
   background-color: #1e1f21;
   color: #ddd;
   /* box-shadow: none; */
 `;
 
 const EventTitle = styled("input")`
-  padding: 4px 14px;
+  padding: 8px 14px;
   width: 100%;
   font-size: 0.85rem;
   outline: none;
@@ -47,7 +47,18 @@ const EventTitle = styled("input")`
   color: #ddd;
 `;
 
-const EventBody = styled(EventTitle)``;
+const EventBody = styled("textarea")`
+  padding: 8px 14px;
+  width: 100%;
+  height: 60px;
+  font-size: 0.85rem;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #464648;
+  background-color: #1e1f21;
+  color: #ddd;
+  resize: none;
+`;
 
 const ButtonsWrapper = styled("div")`
   display: flex;
@@ -101,10 +112,14 @@ function App() {
     date: moment().format("X"),
   };
 
-  const openFormHandler = (operationType, eventForUpdate) => {
+  const openFormHandler = (operationType, eventForUpdate, dayItem) => {
     setShowForm(true);
     setOperation(operationType);
-    setEvent(eventForUpdate || defaultEvent);
+
+    // дефолтная заметка = создание заметки в текущей дате
+    // setEvent(eventForUpdate || defaultEvent);
+    // дефолтная заметка + кликнутая дата = создание заметки в кликнутую дату
+    setEvent(eventForUpdate || { ...defaultEvent, date: dayItem.format("X") });
   };
 
   const closeFormHandler = () => {
@@ -146,6 +161,21 @@ function App() {
       });
   };
 
+  const removeEventHandler = () => {
+    fetch(`${BASE_URL}/events/${event.id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setEvents((prev) =>
+          prev.filter((prevEvent) => prevEvent.id !== event.id)
+        );
+
+        closeFormHandler();
+      });
+  };
+
   return (
     <>
       {isShowForm && (
@@ -154,16 +184,21 @@ function App() {
             <EventTitle
               value={event.title}
               onChange={(e) => changeEventHandler(e.target.value, "title")}
+              placeholder="Title"
             />
             <EventBody
               value={event.description}
               onChange={(e) =>
                 changeEventHandler(e.target.value, "description")
               }
+              placeholder="Description"
             />
             <ButtonsWrapper>
               <button onClick={closeFormHandler}>Cancel</button>
               <button onClick={eventFetchHandler}>{operation}</button>
+              {operation === "Update" && (
+                <button onClick={removeEventHandler}>Remove</button>
+              )}
             </ButtonsWrapper>
           </FormWrapper>
         </FormPositionWrapper>
