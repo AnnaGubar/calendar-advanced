@@ -1,6 +1,6 @@
 import moment from "moment";
 import styled from "styled-components";
-import {TOTAL_DAYS} from '../../constants'
+import { TOTAL_DAYS } from "../../constants";
 
 const GridWrapper = styled.div`
   display: grid;
@@ -19,12 +19,14 @@ const CellWrapper = styled.div`
 
 const RowInCellWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: ${(props) =>
     props.justifyContent ? props.justifyContent : "flex-start"};
   ${(props) =>
     props.pr &&
     `padding-right:${props.pr * 8}px`}; // пропс pr={1} отступ(1*8)px
 `;
+
 const DayWrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -44,7 +46,35 @@ const CurrentDay = styled("div")`
   border-radius: 50%;
 `;
 
-const Grid = ({ startDay,today}) => {
+const ShowDayWpapper = styled("div")`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const EventListWrapper = styled("ul")`
+ margin: 0;
+ padding-left: 4px;
+ list-style-position: inside;
+
+`;
+
+const EventItemWrapper = styled("button")`
+position: relative;
+left: -14px;
+margin: 0;
+padding: 0;
+width: 114px;
+text-align: left;
+text-overflow: ellipsis;
+overflow: hidden;
+white-space: nowrap;
+border: none;
+background: none;
+color: #DDD;
+cursor: pointer;
+`;
+
+const Grid = ({ startDay, today, events }) => {
   // clone() - чтобы не мутировать startDay
   // const day = startDay.clone().subtract(1,"day");
   const day = startDay.clone();
@@ -71,20 +101,42 @@ const Grid = ({ startDay,today}) => {
       </GridWrapper>
 
       <GridWrapper>
+        {/* перечень дней недели */}
         {daysMap.map((dayItem) => (
           <CellWrapper
             key={dayItem.unix()}
             isWeekend={dayItem.day() === 6 || dayItem.day() === 0}
-            isCurrentMonth={isCurrentMonth(dayItem)}
-          >
+            isCurrentMonth={isCurrentMonth(dayItem)}>
+
+            {/* сетка дней */}
             <RowInCellWrapper justifyContent={"flex-end"}>
-              <DayWrapper>
-                {!isCurrentDay(dayItem) ? (
-                  dayItem.format("D")
-                ) : (
-                  <CurrentDay>{dayItem.format("D")}</CurrentDay>
-                )}
-              </DayWrapper>
+              <ShowDayWpapper>
+                <DayWrapper>
+                  {!isCurrentDay(dayItem) ? (
+                    dayItem.format("D")
+                  ) : (
+                    <CurrentDay>{dayItem.format("D")}</CurrentDay>
+                  )}
+                </DayWrapper>
+              </ShowDayWpapper>
+
+              {/* заметки */}
+              <EventListWrapper>
+                {/* <div>{dayItem.format("X")}</div> */}
+                {events
+                  .filter(
+                    (event) =>
+                      event.date >= dayItem.format("X") &&
+                      event.date <= dayItem.clone().endOf("day").format("X")
+                  )
+                  .map((event) => (
+                    <li key={event.id}>
+                      <EventItemWrapper>
+                      {event.title}</EventItemWrapper></li>
+                  ))}
+                {/* <div>{dayItem.clone().endOf("day").format("X")}</div> */}
+              </EventListWrapper>
+
             </RowInCellWrapper>
           </CellWrapper>
         ))}

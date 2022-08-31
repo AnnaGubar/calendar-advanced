@@ -18,8 +18,7 @@ const ShadowWrapper = styled("div")`
 `;
 
 function App() {
-
-  window.moment = moment
+  window.moment = moment;
   // определение и отображение выбранного месяца с неактивными днями пред/след месяцев
   const [today, setToday] = useState(moment());
   const startDay = today.clone().startOf("month").startOf("week");
@@ -37,16 +36,21 @@ function App() {
   // работа с заметками: поиск, фильтрация
   const [events, setEvents] = useState([]);
   const startDayQwery = startDay.clone().format("X");
-  const endDayQwery = startDay.clone().add(TOTAL_DAYS,"days").format("X");// конец разметочного месяца
+  const endDayQwery = startDay.clone().add(TOTAL_DAYS, "days").format("X"); // конец разметочного месяца
 
   useEffect(() => {
-    fetch(`${BASE_URL}/events?date_gte=${startDayQwery}&date_lte=${endDayQwery}`)
+    fetch(
+      `${BASE_URL}/events?date_gte=${startDayQwery}&date_lte=${endDayQwery}`
+    )
       .then((res) => res.json())
       .then((res) => {
-        console.log("res", res);
+        // console.log("today", today); // выбранный месяц
+        // console.log("res", res); // заметки выбранного месяца
+
         setEvents(res);
       });
-  }, [startDayQwery,endDayQwery]);
+    // отображает заметки в зависимости от today (today меняется из-за переключения кнопок prev/next)
+  }, [endDayQwery, startDayQwery, today]);
 
   return (
     <ShadowWrapper>
@@ -59,7 +63,7 @@ function App() {
         nextHandler={nextHandler}
       />
 
-      <Grid startDay={startDay} today={today}/>
+      <Grid startDay={startDay} today={today} events={events}/>
     </ShadowWrapper>
   );
 }

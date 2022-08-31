@@ -1,4 +1,4 @@
-### moment styled-components json-server
+### moment | styled-components | json-server
 
 `npm i moment` - для работы с датой
 
@@ -11,7 +11,7 @@
 3. Создание сетки календаря ()
 4. Стилизация сетки
 
-- `npm i styled-components`
+- `npm i styled-components` формат `styled.div`/`styled("div")`
 - `vscode-styled-jsx-stylus`- расширение в VSC
 
 5. Выводим данные (кол-во дней) в календарь (daysArray)
@@ -40,14 +40,37 @@
 9. Реализация и стили дней выбранного месяца
 10. Реализация и стили дней не актуального месяца
 11. Поключаем БД для хранения заметок
-  - `npm i json-server`
-  - создать корневую папку db.json с конфигурациями
-    - "date" принимает значение даты в виде timestamp (кол-во секунд) `https://i-leon.ru/tools/time`
-  - добавили скрипт в package.json для запуска сервера 
-    - `"server":"npx json-server --watch db.json --port 4444"` - по умолачанию порт 3000
+
+- `npm i json-server`
+- создать корневую папку db.json с конфигурациями
+  - "date" принимает значение даты в виде timestamp (кол-во секунд) `https://i-leon.ru/tools/time`
+- добавили скрипт в package.json для запуска сервера
+  - `"server":"npx json-server --watch db.json --port 4444"` - по умолачанию порт 3000
+
 12. Инфу которую получаем динамически обрабатывать в useEffect
-  - получаем данные (fetch)
-  - добавить полученные данные в состояние (setState)
+
+- получаем данные (fetch)
+- добавить полученные данные в состояние (setState)
+
 13. Фильтруем данные: берем заметки только текущего дня
-  - `GET /posts?views_gte=10&views_lte=20` - диапазон для фильтра gte(>) lte(<)
-  - `moment().format("X")` - формат timestamp
+
+- `GET /posts?views_gte=10&views_lte=20` - диапазон для фильтра gte(>) lte(<)
+- `moment().format("X")` - формат timestamp
+- отображение заметок в useEffect зависит от изменения today
+
+14. выводим заметки в сетку календаря events->Grid
+
+- стилизация
+- определяем начало/конец дня
+
+```
+              <div>
+              <div>{dayItem.format("X")}</div>
+              {events.filter(
+                (event) =>
+                  event.date >= dayItem.format("X") &&
+                  event.date <= dayItem.clone().endOf("day").format("X")
+              ).map(event=><div>{event.date}</div>)}
+              <div>{dayItem.clone().endOf("day").format("X")}</div>
+            </div>
+```
