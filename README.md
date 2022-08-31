@@ -73,9 +73,15 @@
 ```
 <Ancestor onClick={eventHandler}>
   <Parent onClick={e=>e.stopPropagation()}>
-   <Child>
-       <button onClick={eventHandler}>Close</button>
-    </Child>
+   <Child onClick={eventHandler}>Close</Child>
   </Parent>
 </Ancestor>
 ```
+16. Отправляем добавленную/отредактированную заметку в БД
+  - создание `POST запроса` - добавление заметки
+  ```
+fetch(fetchUrl, {
+  method: httpMethod,
+  headers: { "Content-Type": "application/json" }, // без этого не создается тело
+  body: JSON.stringify(event)})
+  ```

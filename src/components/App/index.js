@@ -37,24 +37,22 @@ const FormWrapper = styled(ShadowWrapper)`
 `;
 
 const EventTitle = styled("input")`
-padding: 4px 14px;
-width: 100%;
-font-size: .85rem;
-outline: none;
-border: none;
-border-bottom: 1px solid #464648;
-background-color: #1E1F21;
-color: #DDD;
+  padding: 4px 14px;
+  width: 100%;
+  font-size: 0.85rem;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #464648;
+  background-color: #1e1f21;
+  color: #ddd;
 `;
 
-const EventBody = styled(EventTitle)`
-
-`;
+const EventBody = styled(EventTitle)``;
 
 const ButtonsWrapper = styled("div")`
-display: flex;
-justify-content: flex-end;
-padding: 8px 14px;
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 14px;
 `;
 
 function App() {
@@ -94,47 +92,84 @@ function App() {
 
   // ◼ модальное окно для заметок/дат
   const [event, setEvent] = useState(null);
-  const [method, setMethod] = useState(null);
+  const [operation, setOperation] = useState(null);
   const [isShowForm, setShowForm] = useState(false);
   // добавив/редактировав дату будет отображаться текущее время
-  const defaultEvent={
-    title:"",
-    description:"",
-    date:moment().format("X"),
-  }
-
-  const openFormHandler = (methodName, eventForUpdate) => {
-    setShowForm(true);
-    setMethod(methodName);
-    setEvent(eventForUpdate||defaultEvent);
+  const defaultEvent = {
+    title: "",
+    description: "",
+    date: moment().format("X"),
   };
 
-  const closeFormHandler=()=>{
+  const openFormHandler = (operationType, eventForUpdate) => {
+    setShowForm(true);
+    setOperation(operationType);
+    setEvent(eventForUpdate || defaultEvent);
+  };
+
+  const closeFormHandler = () => {
     setShowForm(false);
     setEvent(null);
-  }
+  };
 
-  const changeEventHandler=(text,field)=>{
-    setEvent(prev=>({...prev,[field]:text}));
-  }
+  const changeEventHandler = (text, field) => {
+    setEvent((prev) => ({ ...prev, [field]: text }));
+  };
+
+  // ◼ отправка добавленной/отредактированной заметки в БД
+  const eventFetchHandler = () => {
+    const fetchUrl =
+      operation === "Update"
+        ? `${BASE_URL}/events/${event.id}`
+        : `${BASE_URL}/events`;
+    const httpMethod = operation === "Update" ? "PATCH" : "POST";
+
+    fetch(fetchUrl, {
+      method: httpMethod,
+      headers: { "Content-Type": "application/json" }, // без этого не создается тело
+      body: JSON.stringify(event),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        // console.log(res);// тело заметки
+
+        // чтобы редактировать существующую и не создавать как новую
+        if (operation === "Update") {
+          setEvents((prev) =>
+            prev.map((eventEl) => (eventEl.id === res.id ? res : eventEl))
+          );
+        } else {
+          setEvents((prev) => [...prev, res]);
+        }
+
+        closeFormHandler();
+      });
+  };
 
   return (
     <>
       {isShowForm && (
         <FormPositionWrapper onClick={closeFormHandler}>
-          <FormWrapper onClick={e=>e.stopPropagation()}>
-            <EventTitle value={event.title} onChange={e=>changeEventHandler(e.target.value,"title")}/>
-            <EventBody value={event.description} onChange={e=>changeEventHandler(e.target.value,"description")}/>
+          <FormWrapper onClick={(e) => e.stopPropagation()}>
+            <EventTitle
+              value={event.title}
+              onChange={(e) => changeEventHandler(e.target.value, "title")}
+            />
+            <EventBody
+              value={event.description}
+              onChange={(e) =>
+                changeEventHandler(e.target.value, "description")
+              }
+            />
             <ButtonsWrapper>
               <button onClick={closeFormHandler}>Cancel</button>
-              <button>{method}</button>
-              </ButtonsWrapper>
-            </FormWrapper>
+              <button onClick={eventFetchHandler}>{operation}</button>
+            </ButtonsWrapper>
+          </FormWrapper>
         </FormPositionWrapper>
       )}
 
       <ShadowWrapper>
-
         <Header />
 
         <Monitor
@@ -150,7 +185,6 @@ function App() {
           events={events}
           openFormHandler={openFormHandler}
         />
-
       </ShadowWrapper>
     </>
   );
