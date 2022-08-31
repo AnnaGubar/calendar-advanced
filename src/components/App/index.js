@@ -1,9 +1,11 @@
 import moment from "moment";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
+
 import { Grid } from "../Grid";
 import { Header } from "../Header";
 import { Monitor } from "../Monitor";
+import { TOTAL_DAYS, BASE_URL } from "../../constants";
 
 const ShadowWrapper = styled("div")`
   border-top: 1px solid #737374;
@@ -16,26 +18,47 @@ const ShadowWrapper = styled("div")`
 `;
 
 function App() {
+
+  window.moment = moment
+  // определение и отображение выбранного месяца с неактивными днями пред/след месяцев
   const [today, setToday] = useState(moment());
-
-  // c какого дня в календаре начинается первая неделя месяца (разметка)
   const startDay = today.clone().startOf("month").startOf("week");
-  // каким днем в календаре заканчивается последняя неделя месяца (разметка)
-  // const endDay = moment().endOf("month").endOf("week");
 
-  const prevHandler = () => {setToday(prev=>prev.clone().subtract(1,"month"))};
-  const todayHandler = () => {setToday(moment())};
-  const nextHandler = () => {setToday(prev=>prev.clone().add(1,"month"))};
+  const prevHandler = () => {
+    setToday((prev) => prev.clone().subtract(1, "month"));
+  };
+  const todayHandler = () => {
+    setToday(moment());
+  };
+  const nextHandler = () => {
+    setToday((prev) => prev.clone().add(1, "month"));
+  };
+
+  // работа с заметками: поиск, фильтрация
+  const [events, setEvents] = useState([]);
+  const startDayQwery = startDay.clone().format("X");
+  const endDayQwery = startDay.clone().add(TOTAL_DAYS,"days").format("X");// конец разметочного месяца
+
+  useEffect(() => {
+    fetch(`${BASE_URL}/events?date_gte=${startDayQwery}&date_lte=${endDayQwery}`)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("res", res);
+        setEvents(res);
+      });
+  }, [startDayQwery,endDayQwery]);
 
   return (
     <ShadowWrapper>
       <Header />
+
       <Monitor
         today={today}
         prevHandler={prevHandler}
         todayHandler={todayHandler}
         nextHandler={nextHandler}
       />
+
       <Grid startDay={startDay} today={today}/>
     </ShadowWrapper>
   );

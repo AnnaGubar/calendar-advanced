@@ -1,0 +1,28 @@
+{
+  "events": [
+    {
+      "id": 1,
+      "title": "Go to bed",
+      "description": "To sleep well",
+      "date": 1643629155
+    },
+    {
+      "id": 2,
+      "title": "Wake up",
+      "description": "To start a new day",
+      "date": 1661945955
+    },
+    {
+      "id": 3,
+      "title": "Clean my room",
+      "description": "Need to do it very fast",
+      "date": 1661989155
+    },
+    {
+      "id": 4,
+      "title": "10month",
+      "description": "-",
+      "date": 1667216355
+    }
+  ]
+}

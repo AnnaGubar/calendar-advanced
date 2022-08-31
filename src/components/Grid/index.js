@@ -1,5 +1,6 @@
 import moment from "moment";
 import styled from "styled-components";
+import {TOTAL_DAYS} from '../../constants'
 
 const GridWrapper = styled.div`
   display: grid;
@@ -39,14 +40,11 @@ const CurrentDay = styled("div")`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f00;
+  background-color: #fe3119;
   border-radius: 50%;
 `;
 
-const Grid = ({ startDay,today }) => {
-  // разметка - максимально 6 недель по 7 дней
-  const TOTAL_DAYS = 42;
-
+const Grid = ({ startDay,today}) => {
   // clone() - чтобы не мутировать startDay
   // const day = startDay.clone().subtract(1,"day");
   const day = startDay.clone();
