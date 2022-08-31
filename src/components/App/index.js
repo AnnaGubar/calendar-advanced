@@ -66,6 +66,16 @@ const ButtonsWrapper = styled("div")`
   padding: 8px 14px;
 `;
 
+const ButtonWrapper = styled("button")`
+  color: ${(props) => (props.danger ? "#F00" : "#27222A")};
+  border: 1px solid ${(props) => (props.danger ? "#F00" : "#27222A")};
+  border-radius: 2px;
+  cursor: pointer;
+  &:not(:last-child) {
+    margin-right: 2px;
+  }
+`;
+
 function App() {
   window.moment = moment;
   // ◼ определение и отображение выбранного месяца с неактивными днями пред/след месяцев
@@ -194,10 +204,10 @@ function App() {
               placeholder="Description"
             />
             <ButtonsWrapper>
-              <button onClick={closeFormHandler}>Cancel</button>
-              <button onClick={eventFetchHandler}>{operation}</button>
+              <ButtonWrapper onClick={closeFormHandler}>Cancel</ButtonWrapper>
+              <ButtonWrapper onClick={eventFetchHandler}>{operation}</ButtonWrapper>
               {operation === "Update" && (
-                <button onClick={removeEventHandler}>Remove</button>
+                <ButtonWrapper danger onClick={removeEventHandler}>Remove</ButtonWrapper>
               )}
             </ButtonsWrapper>
           </FormWrapper>
