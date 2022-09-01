@@ -1,12 +1,13 @@
 import styled from "styled-components";
+import { DISPLAY_MODE_DAY, DISPLAY_MODE_MONTH } from "../../constants";
 
 const DivWrapper = styled("div")`
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 5px 15px;
   background-color: #1e1f21;
   color: #dcdddd;
+  padding: 16px;
+  position: relative;
 `;
 
 const TextWrapper = styled("span")`
@@ -15,36 +16,62 @@ const TextWrapper = styled("span")`
 
 const TitleWrapper = styled(TextWrapper)`
   font-weight: bold;
-  margin-right: 8px;
+  margin: 0 8px;
+`;
+
+const ButtonsWrapper = styled("div")`
+  display: flex;
+  align-items: center;
+`;
+
+const ButtonsCenterWrapper = styled(ButtonsWrapper)`
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  transform: translate(50%, -50%);
 `;
 
 const ButtonWrapper = styled("button")`
+  border: unset;
+  background-color: ${(props) => (props.unPressed ? "#27282A" : "#565759")};
+  border: 1px solid #565759;
   height: 20px;
-  margin-right: 2px;
-  border-radius: 4;
-  border: none;
-  color: #e6e6e6;
-  background-color: #565759;
+  border-radius: 4px;
+  color: ${(props) => (props.unPressed ? "#a4a6a9" : "#E6E6E6")};
+  outline: unset;
   cursor: pointer;
+  &:not(:last-child) {
+    margin-right: 2px;
+  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const TodayButtonWrapper = styled(ButtonWrapper)`
-  padding: 0 16px;
   font-weight: bold;
 `;
 
-const Monitor = ({ today, prevHandler, todayHandler, nextHandler }) => {
+const Monitor = ({ today, prevHandler, todayHandler, nextHandler, setDisplayMode ,displayMode}) => {
   return (
     <DivWrapper>
       <div>
+{displayMode === DISPLAY_MODE_DAY && <TextWrapper>{today.format("DD")}</TextWrapper>}
+
         <TitleWrapper>{today.format("MMMM")}</TitleWrapper>
         <TextWrapper>{today.format("YYYY")}</TextWrapper>
       </div>
-      <div>
+
+      <ButtonsCenterWrapper>
+      <ButtonWrapper unPressed={displayMode === DISPLAY_MODE_MONTH} onClick={() => setDisplayMode(DISPLAY_MODE_MONTH)}>Month</ButtonWrapper>
+      <ButtonWrapper unPressed={displayMode === DISPLAY_MODE_DAY} onClick={() => setDisplayMode(DISPLAY_MODE_DAY)}>Day</ButtonWrapper>
+    </ButtonsCenterWrapper>
+
+      <ButtonsWrapper>
         <ButtonWrapper onClick={prevHandler}>&lt;</ButtonWrapper>
         <TodayButtonWrapper onClick={todayHandler}>Today</TodayButtonWrapper>
         <ButtonWrapper onClick={nextHandler}>&gt;</ButtonWrapper>
-      </div>
+      </ButtonsWrapper>
     </DivWrapper>
   );
 };

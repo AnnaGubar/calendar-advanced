@@ -4,4 +4,13 @@ const DAYS_IN_WEEK = 7;
 
 const BASE_URL = "http://localhost:4444";
 
-export { TOTAL_DAYS, DAYS_IN_WEEK, BASE_URL };
+const DISPLAY_MODE_MONTH = "month";
+const DISPLAY_MODE_DAY = "day";
+
+export {
+  TOTAL_DAYS,
+  DAYS_IN_WEEK,
+  BASE_URL,
+  DISPLAY_MODE_MONTH,
+  DISPLAY_MODE_DAY,
+};

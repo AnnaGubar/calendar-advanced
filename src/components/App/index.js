@@ -5,15 +5,26 @@ import styled from "styled-components";
 import { Grid } from "../Grid";
 import { Header } from "../Header";
 import { Monitor } from "../Monitor";
-import { TOTAL_DAYS, BASE_URL } from "../../constants";
+import {
+  TOTAL_DAYS,
+  BASE_URL,
+  DISPLAY_MODE_MONTH,
+  DISPLAY_MODE_DAY,
+} from "../../constants";
+import { DayShowComponent } from "../DayShowComponent";
 
 const ShadowWrapper = styled("div")`
+  display: flex;
+  flex-direction: column;
+  min-width: 850px;
+  height: 702px;
   border-top: 1px solid #737374;
   border-left: 1px solid #464648;
   border-right: 1px solid #464648;
   border-bottom: 2px solid #464648;
   border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0 0 0 1px #1A1A1A, 0 8px 20px 6px #888;
 `;
 
 const FormPositionWrapper = styled("div")`
@@ -31,6 +42,8 @@ const FormPositionWrapper = styled("div")`
 
 const FormWrapper = styled(ShadowWrapper)`
   width: 320px;
+  min-width: 320px;
+  height: 132px;
   background-color: #1e1f21;
   color: #ddd;
   /* box-shadow: none; */
@@ -56,7 +69,7 @@ const EventBody = styled("textarea")`
   border: none;
   border-bottom: 1px solid #464648;
   background-color: #1e1f21;
-  color: #ddd;
+  color: #DDD;
   resize: none;
 `;
 
@@ -67,13 +80,11 @@ const ButtonsWrapper = styled("div")`
 `;
 
 const ButtonWrapper = styled("button")`
-  color: ${(props) => (props.danger ? "#F00" : "#27222A")};
-  border: 1px solid ${(props) => (props.danger ? "#F00" : "#27222A")};
+  background-color: ${(props) => props.danger && "rgba(254, 49, 25, 0.8)"};
   border-radius: 2px;
+  font-weight: 700;
   cursor: pointer;
-  &:not(:last-child) {
-    margin-right: 2px;
-  }
+  &:not(:last-child) {margin-right: 2px};
 `;
 
 function App() {
@@ -82,14 +93,17 @@ function App() {
   const [today, setToday] = useState(moment());
   const startDay = today.clone().startOf("month").startOf("week");
 
+    // ◼ отображение месяца с заметками и расписания дня
+    const [displayMode, setDisplayMode] = useState("month");
+
   const prevHandler = () => {
-    setToday((prev) => prev.clone().subtract(1, "month"));
+    setToday((prev) => prev.clone().subtract(1, displayMode));
   };
   const todayHandler = () => {
     setToday(moment());
   };
   const nextHandler = () => {
-    setToday((prev) => prev.clone().add(1, "month"));
+    setToday((prev) => prev.clone().add(1, displayMode));
   };
 
   // ◼ работа с заметками: поиск, фильтрация
@@ -186,6 +200,8 @@ function App() {
       });
   };
 
+
+
   return (
     <>
       {isShowForm && (
@@ -205,9 +221,13 @@ function App() {
             />
             <ButtonsWrapper>
               <ButtonWrapper onClick={closeFormHandler}>Cancel</ButtonWrapper>
-              <ButtonWrapper onClick={eventFetchHandler}>{operation}</ButtonWrapper>
+              <ButtonWrapper onClick={eventFetchHandler}>
+                {operation}
+              </ButtonWrapper>
               {operation === "Update" && (
-                <ButtonWrapper danger onClick={removeEventHandler}>Remove</ButtonWrapper>
+                <ButtonWrapper danger onClick={removeEventHandler}>
+                  Remove
+                </ButtonWrapper>
               )}
             </ButtonsWrapper>
           </FormWrapper>
@@ -222,14 +242,27 @@ function App() {
           prevHandler={prevHandler}
           todayHandler={todayHandler}
           nextHandler={nextHandler}
+          displayMode={displayMode}
+          setDisplayMode={setDisplayMode}
         />
 
-        <Grid
-          startDay={startDay}
-          today={today}
-          events={events}
-          openFormHandler={openFormHandler}
-        />
+        {displayMode === DISPLAY_MODE_MONTH && (
+          <Grid
+            startDay={startDay}
+            today={today}
+            events={events}
+            openFormHandler={openFormHandler}
+          />
+        )}
+
+        {displayMode === DISPLAY_MODE_DAY && (
+          <DayShowComponent
+            events={events}
+            today={today}
+            selectedEvent={event}
+            setEvent={setEvent}
+          />
+        )}
       </ShadowWrapper>
     </>
   );

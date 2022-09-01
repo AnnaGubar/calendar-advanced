@@ -66,7 +66,7 @@
 - определяем начало/конец дня
 
 ```
-<div>{dayItem.format("X")}</div> {/* start */}
+<div>{dayItem.startOf("day").format("X")}</div> {/* start */}
 <div>{moment().format("X")}</div> {/* current */}
 <div>{dayItem.clone().endOf("day").format("X")}</div> {/* end */}
 ```
@@ -98,3 +98,12 @@ body: JSON.stringify(event)})
 17. Создаем кнопку удаления заметки
 18. Раздробили компоненты
 19. Сделали фиксированной ячейку даты `events.slice(0, 2)`
+20. Создаем отображение расписания дня `displayMode`
+
+- разделили отрисовку разметки в зависимости от displayMode в компоненте Monitor
+- создали компонент DayShowComponent - забираем события дня
+- если displayMode=day стрелки должны переключать не месяца а дни
+  - добавление зависимости к функциям prevHandler/nextHandler
+  - отображаем выбранное из списка событие selectedEvent ([events, setEvents])
+
+21.
