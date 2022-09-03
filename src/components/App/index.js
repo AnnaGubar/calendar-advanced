@@ -12,6 +12,12 @@ import {
   DISPLAY_MODE_DAY,
 } from "../../constants";
 import { DayShowComponent } from "../DayShowComponent";
+import {
+  ButtonsWrapper,
+  ButtonWrapper,
+  EventBody,
+  EventTitle,
+} from "../../containers/StyledComponents";
 
 const ShadowWrapper = styled("div")`
   display: flex;
@@ -24,7 +30,7 @@ const ShadowWrapper = styled("div")`
   border-bottom: 2px solid #464648;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 0 0 1px #1A1A1A, 0 8px 20px 6px #888;
+  box-shadow: 0 0 0 1px #1a1a1a, 0 8px 20px 6px #888;
 `;
 
 const FormPositionWrapper = styled("div")`
@@ -49,52 +55,14 @@ const FormWrapper = styled(ShadowWrapper)`
   /* box-shadow: none; */
 `;
 
-const EventTitle = styled("input")`
-  padding: 8px 14px;
-  width: 100%;
-  font-size: 0.85rem;
-  outline: none;
-  border: none;
-  border-bottom: 1px solid #464648;
-  background-color: #1e1f21;
-  color: #ddd;
-`;
-
-const EventBody = styled("textarea")`
-  padding: 8px 14px;
-  width: 100%;
-  height: 60px;
-  font-size: 0.85rem;
-  outline: none;
-  border: none;
-  border-bottom: 1px solid #464648;
-  background-color: #1e1f21;
-  color: #DDD;
-  resize: none;
-`;
-
-const ButtonsWrapper = styled("div")`
-  display: flex;
-  justify-content: flex-end;
-  padding: 8px 14px;
-`;
-
-const ButtonWrapper = styled("button")`
-  background-color: ${(props) => props.danger && "rgba(254, 49, 25, 0.8)"};
-  border-radius: 2px;
-  font-weight: 700;
-  cursor: pointer;
-  &:not(:last-child) {margin-right: 2px};
-`;
-
 function App() {
   window.moment = moment;
   // ◼ определение и отображение выбранного месяца с неактивными днями пред/след месяцев
   const [today, setToday] = useState(moment());
   const startDay = today.clone().startOf("month").startOf("week");
 
-    // ◼ отображение месяца с заметками и расписания дня
-    const [displayMode, setDisplayMode] = useState("month");
+  // ◼ отображение месяца с заметками и расписания дня
+  const [displayMode, setDisplayMode] = useState(DISPLAY_MODE_MONTH);
 
   const prevHandler = () => {
     setToday((prev) => prev.clone().subtract(1, displayMode));
@@ -137,13 +105,19 @@ function App() {
   };
 
   const openFormHandler = (operationType, eventForUpdate, dayItem) => {
-    setShowForm(true);
-    setOperation(operationType);
-
+    // setShowForm(true);
+    
     // дефолтная заметка = создание заметки в текущей дате
     // setEvent(eventForUpdate || defaultEvent);
     // дефолтная заметка + кликнутая дата = создание заметки в кликнутую дату
     setEvent(eventForUpdate || { ...defaultEvent, date: dayItem.format("X") });
+    setOperation(operationType);
+  };
+
+  const openModalFormHandler = (operationType, eventForUpdate, dayItem) => {
+    setShowForm(true);
+    openFormHandler(operationType, eventForUpdate, dayItem)
+
   };
 
   const closeFormHandler = () => {
@@ -200,8 +174,6 @@ function App() {
       });
   };
 
-
-
   return (
     <>
       {isShowForm && (
@@ -221,9 +193,7 @@ function App() {
             />
             <ButtonsWrapper>
               <ButtonWrapper onClick={closeFormHandler}>Cancel</ButtonWrapper>
-              <ButtonWrapper onClick={eventFetchHandler}>
-                {operation}
-              </ButtonWrapper>
+              <ButtonWrapper onClick={eventFetchHandler}>{operation}</ButtonWrapper>
               {operation === "Update" && (
                 <ButtonWrapper danger onClick={removeEventHandler}>
                   Remove
@@ -251,7 +221,8 @@ function App() {
             startDay={startDay}
             today={today}
             events={events}
-            openFormHandler={openFormHandler}
+            openFormHandler={openModalFormHandler}
+            setDisplayMode={setDisplayMode}
           />
         )}
 
@@ -261,6 +232,12 @@ function App() {
             today={today}
             selectedEvent={event}
             setEvent={setEvent}
+            operation={operation}
+            removeEventHandler={removeEventHandler}
+            eventFetchHandler={eventFetchHandler}
+            closeFormHandler={closeFormHandler}
+            changeEventHandler={changeEventHandler}
+            openFormHandler={openFormHandler}
           />
         )}
       </ShadowWrapper>

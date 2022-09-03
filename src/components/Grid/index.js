@@ -10,7 +10,7 @@ const GridWrapper = styled.div`
   ${(props) => props.isHeader && "border-bottom:1px solid #404040"}
 `;
 
-const Grid = ({ startDay, today, events, openFormHandler }) => {
+const Grid = ({ startDay, today, events, openFormHandler, setDisplayMode }) => {
   return (
     <>
       <GridWrapper isHeader>
@@ -18,7 +18,13 @@ const Grid = ({ startDay, today, events, openFormHandler }) => {
       </GridWrapper>
 
       <GridWrapper>
-        <MonthDaysList startDay={startDay} events={events} openFormHandler={openFormHandler} today={today}/>
+        <MonthDaysList
+          startDay={startDay}
+          events={events}
+          openFormHandler={openFormHandler}
+          today={today}
+          setDisplayMode={setDisplayMode}
+        />
       </GridWrapper>
     </>
   );

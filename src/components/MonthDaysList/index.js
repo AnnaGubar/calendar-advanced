@@ -2,7 +2,13 @@ import { TOTAL_DAYS } from "../../constants";
 import { isDayContainCurrentEvent } from "../../helpers";
 import { GridCell } from "../GridCell";
 
-const MonthDaysList = ({ startDay, events, openFormHandler, today }) => {
+const MonthDaysList = ({
+  startDay,
+  events,
+  openFormHandler,
+  today,
+  setDisplayMode,
+}) => {
   // clone() - чтобы не мутировать startDay
   // const day = startDay.clone().subtract(1,"day");
   const day = startDay.clone();
@@ -15,10 +21,11 @@ const MonthDaysList = ({ startDay, events, openFormHandler, today }) => {
       {/* перечень дней недели */}
       {daysMap.map((dayItem) => (
         <GridCell
-        key={dayItem}
+          key={dayItem}
           dayItem={dayItem}
           today={today}
           openFormHandler={openFormHandler}
+          setDisplayMode={setDisplayMode}
           events={events.filter((event) =>
             isDayContainCurrentEvent(event, dayItem)
           )}

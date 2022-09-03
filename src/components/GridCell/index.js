@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { DISPLAY_MODE_DAY } from "../../constants";
 import {
   CellWrapper,
   RowInCellWrapper,
@@ -61,12 +62,12 @@ const EventItemWrapper = styled("button")`
   border-radius: 2px;
 `;
 
-const GridCell = ({ dayItem, today, openFormHandler, events }) => {
+const GridCell = ({ dayItem, today, openFormHandler, events,setDisplayMode }) => {
   return (
     <>
       <CellWrapper
         key={dayItem.unix()}
-        isWeekend={dayItem.day() === 6 || dayItem.day() === 0}
+        isWeekday={dayItem.day() === 6 || dayItem.day() === 0}
         isCurrentMonth={isCurrentMonth(dayItem, today)}
       >
         {/* сетка дней */}
@@ -99,7 +100,7 @@ const GridCell = ({ dayItem, today, openFormHandler, events }) => {
             {/* если заметок больше двух  */}
             {events.length > 2 ? (
               <EventListItemWrapper key="show more">
-                <EventItemWrapper>show more...</EventItemWrapper>
+                <EventItemWrapper onClick={()=>setDisplayMode(DISPLAY_MODE_DAY)}>show more...</EventItemWrapper>
               </EventListItemWrapper>
             ) : null}
 

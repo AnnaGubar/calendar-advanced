@@ -45,42 +45,42 @@ export const EventItemWrapper = styled('button')`
 
 `;
 
-// export const EventTitle = styled('input')`
-//   padding: 8px 14px;
-//   font-size: .85rem;
-//   width: 100%;
-//   border: unset;
-//   background-color: #1E1F21;
-//   color: #DDDDDD;
-//   outline: unset;
-//   border-bottom: 1px solid #464648;
-// `;
+export const EventTitle = styled('input')`
+  padding: 8px 14px;
+  font-size: .85rem;
+  width: 100%;
+  border: unset;
+  background-color: #1E1F21;
+  color: #DDDDDD;
+  outline: unset;
+  border-bottom: 1px solid #464648;
+`;
 
-// export const EventBody = styled('textarea')`
-//   padding: 8px 14px;
-//   font-size: .85rem;
-//   width: 100%;
-//   border: unset;
-//   background-color: #1E1F21;
-//   color: #DDDDDD;
-//   outline: unset;
-//   border-bottom: 1px solid #464648;
-//   resize: none;
-//   height: 60px;
-// `;
+export const EventBody = styled('textarea')`
+  padding: 8px 14px;
+  font-size: .85rem;
+  width: 100%;
+  border: unset;
+  background-color: #1E1F21;
+  color: #DDDDDD;
+  outline: unset;
+  border-bottom: 1px solid #464648;
+  resize: none;
+  height: 60px;
+`;
 
-// export const ButtonsWrapper = styled('div')`
-//   padding: 8px 14px;
-//   display: flex;
-//   justify-content: flex-end;
-// `;
+export const ButtonsWrapper = styled('div')`
+  padding: 8px 14px;
+  display: flex;
+  justify-content: flex-end;
+`;
 
-// export const ButtonWrapper = styled('button')`
-//   color: ${props => props.danger ? '#f00' : '#27282A'};
-//   border: 1px solid ${props => props.danger ? '#f00' : '#27282A'};
-//   border-radius: 2px;
-//   cursor: pointer;
-//   &:not(:last-child){
-//     margin-right: 2px;
-//   }
-// `;
+export const ButtonWrapper = styled('button')`
+  color: ${props => props.danger ? '#f00' : '#27282A'};
+  border: 1px solid ${props => props.danger ? '#f00' : '#27282A'};
+  border-radius: 2px;
+  cursor: pointer;
+  &:not(:last-child){
+    margin-right: 2px;
+  }
+`;
