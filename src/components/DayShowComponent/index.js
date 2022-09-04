@@ -13,7 +13,7 @@ import { isDayContainCurrentEvent } from "../../helpers";
 const DayShowWrapper = styled("div")`
   display: flex;
   flex-grow: 1;
-  border-top: 1px solid #464648;
+  /* border-top: 1px solid #464648; */
 `;
 
 const EventsListWrapper = styled("div")`
@@ -29,6 +29,10 @@ const EventFormWrapper = styled("div")`
   background-color: #27282a;
   color: #dddddd;
   border-left: 1px solid #464648;
+
+  border-top: 1px solid #464648;
+
+
 `;
 
 const NoEventMsg = styled("div")`
@@ -50,9 +54,10 @@ const ScaleCellWrapper = styled("div")`
   flex-grow: 1;
   position: relative;
   &:not(:last-child) {
-    border-bottom: 1px solid #464648;
+    /* border-bottom: 1px solid #464648; */
   }
   margin-left: 32px;
+  border-top: 1px solid #464648;
 `;
 
 const ScaleCellTimeWrapper = styled("div")`
@@ -64,6 +69,13 @@ const ScaleCellTimeWrapper = styled("div")`
 
 const ScaleCellEventWrapper = styled("div")`
   min-height: 16px;
+`;
+
+const ButtonCreateEventWrapper = styled("button")`
+display: block;
+margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 const DayShowComponent = ({
@@ -111,7 +123,8 @@ const DayShowComponent = ({
           {hoursCells.map((eventsList, index) => (
             <ScaleCellWrapper>
               <ScaleCellTimeWrapper>
-                {index ? <>{`${index}`.padStart(2, "0")}:00</> : null}
+                {/* {index ? <>{`${index}`.padStart(2, "0")}:00</> : null} */}
+                {`${index}`.padStart(2, "0")}:00
               </ScaleCellTimeWrapper>
 
               <ScaleCellEventWrapper>
@@ -159,9 +172,9 @@ const DayShowComponent = ({
         ) : (
           <>
             <div>
-              <button onClick={() => openFormHandler("Create", null, today)}>
+              <ButtonCreateEventWrapper onClick={() => openFormHandler("Create", null, today)}>
                 Create new event
-              </button>
+              </ButtonCreateEventWrapper>
             </div>
             <NoEventMsg>No event selected</NoEventMsg>
           </>
