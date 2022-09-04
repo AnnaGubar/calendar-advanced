@@ -109,4 +109,15 @@ body: JSON.stringify(event)})
 21. Кнопка `Show More` при нажатии переходит в режим отображения расписания дня
 22. Добавляем возможность добавлять заметку в режиме рассписани дня
 23. Часовая сетка в режиме рассписание дня
-  - ` {`${index}`.padStart(2,"0")}:00 ` - сетка часов
+
+- ` {`${index}`.padStart(2,"0")}:00 ` - сетка часов
+
+24. деплой на vercel
+  - `const BASE_URL = process.env.API_URL ? process.env.API_URL : "http://localhost:4444";`
+  - находим свой проект, делаем импорт
+  - `Environment Variables`
+    - name -> API_URL
+    - value -> https://calendar-advanced.herokuapp.com
+  - сделать коммит сохранив настройки  
+
+
