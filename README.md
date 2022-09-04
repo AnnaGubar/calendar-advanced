@@ -118,6 +118,7 @@ body: JSON.stringify(event)})
   - `Environment Variables`
     - name -> API_URL
     - value -> https://calendar-advanced.herokuapp.com
-  - сделать коммит сохранив настройки  
+  - сделать коммит сохранив настройки
+  - deploy  
 
 
