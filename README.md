@@ -113,7 +113,7 @@ body: JSON.stringify(event)})
 - ` {`${index}`.padStart(2,"0")}:00 ` - сетка часов
 
 24. деплой на vercel
-  - `const BASE_URL = process.env.API_URL ? process.env.API_URL : "http://localhost:4444";`
+  - `const BASE_URL = "https://calendar-advanced.herokuapp.com";`
   - находим свой проект, делаем импорт
   - `Environment Variables`
     - name -> API_URL
