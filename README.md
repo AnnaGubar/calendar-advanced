@@ -1,5 +1,7 @@
 ### moment | styled-components | json-server
 
+# HEROKU | VERCEL
+
 `npm i moment` - для работы с датой
 
 `window.moment = moment` - напрямую в devTools вызывает методы библиотеки moment (moment().startOf("month"))
@@ -113,13 +115,12 @@ body: JSON.stringify(event)})
 - ` {`${index}`.padStart(2,"0")}:00 ` - сетка часов
 
 24. деплой на vercel
-  - `const BASE_URL = "https://calendar-advanced.herokuapp.com";`
-  - находим свой проект, делаем импорт
-  - `Environment Variables`
-    - name -> API_URL
-    - value -> https://calendar-advanced.herokuapp.com
-  - сделать коммит сохранив настройки
-  - deploy  
-  - https://calendar-advanced.vercel.app
 
-
+- `const BASE_URL = "https://calendar-advanced.herokuapp.com";`
+- находим свой проект, делаем импорт
+- `Environment Variables`
+  - name -> API_URL
+  - value -> https://calendar-advanced.herokuapp.com
+- сделать коммит сохранив настройки
+- deploy
+- https://calendar-advanced.vercel.app
