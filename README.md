@@ -120,5 +120,6 @@ body: JSON.stringify(event)})
     - value -> https://calendar-advanced.herokuapp.com
   - сделать коммит сохранив настройки
   - deploy  
+  - https://calendar-advanced.vercel.app
 
 
