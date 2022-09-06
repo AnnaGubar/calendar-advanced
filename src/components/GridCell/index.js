@@ -52,7 +52,7 @@ const EventItemWrapper = styled("button")`
   white-space: nowrap;
   width: 114px;
   border: unset;
-  color: #dddddd;
+  color: #DDD;
   cursor: pointer;
   margin: 0;
   padding: 0;
@@ -62,12 +62,23 @@ const EventItemWrapper = styled("button")`
   border-radius: 2px;
 `;
 
+const MoreEventItemWrapper = styled(EventItemWrapper)`
+background-color: transparent;
+color: #AAA;
+text-align: center;
+border-radius: 10px;
+&:hover {
+    background-color: #2A2B2D;
+    color: #DDD;
+  }
+`
+
 const GridCell = ({ dayItem, today, openFormHandler, events,setDisplayMode }) => {
   return (
     <>
       <CellWrapper
         key={dayItem.unix()}
-        isWeekday={dayItem.day() === 6 || dayItem.day() === 0}
+        isWeekend={dayItem.day() === 6 || dayItem.day() === 0}
         isCurrentMonth={isCurrentMonth(dayItem, today)}
       >
         {/* сетка дней */}
@@ -100,7 +111,7 @@ const GridCell = ({ dayItem, today, openFormHandler, events,setDisplayMode }) =>
             {/* если заметок больше двух  */}
             {events.length > 2 ? (
               <EventListItemWrapper key="show more">
-                <EventItemWrapper onClick={()=>setDisplayMode(DISPLAY_MODE_DAY)}>show more...</EventItemWrapper>
+                <MoreEventItemWrapper onClick={()=>setDisplayMode(DISPLAY_MODE_DAY)}>more events</MoreEventItemWrapper>
               </EventListItemWrapper>
             ) : null}
 
