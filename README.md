@@ -124,3 +124,9 @@ body: JSON.stringify(event)})
 - сделать коммит сохранив настройки
 - deploy
 - https://calendar-advanced.vercel.app
+
+25. Создаем таймпикер
+
+- DayShowComponent -> `Number(moment.unix(Number(selectedEvent.date)).format("H"))`
+- создать выпадающее меню (выбор времени)
+- `moment.unix(+selectedEvent.date).hour(index).format("X")` - метод hour() устанавливает час 

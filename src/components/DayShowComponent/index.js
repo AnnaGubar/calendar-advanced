@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import moment from "moment";
+import { useState } from "react";
 import { HOURS_IN_DAY } from "../../constants";
 import {
   ButtonsWrapper,
@@ -31,8 +32,6 @@ const EventFormWrapper = styled("div")`
   border-left: 1px solid #464648;
 
   border-top: 1px solid #464648;
-
-
 `;
 
 const NoEventMsg = styled("div")`
@@ -72,10 +71,38 @@ const ScaleCellEventWrapper = styled("div")`
 `;
 
 const ButtonCreateEventWrapper = styled("button")`
-display: block;
-margin-top: 10px;
+  display: block;
+  margin-top: 10px;
   margin-left: auto;
   margin-right: auto;
+`;
+
+const SelectEventTimeWrapper = styled("div")`
+  padding: 8px 14px;
+  border-bottom: 1px solid #464648;
+  display: flex;
+`;
+
+const ListOfHours = styled("ul")`
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  height: 60px;
+  overflow-y: scroll;
+  color: #000;
+  position: absolute;
+  left: 2px;
+  background-color: rgb(239, 239, 239);
+`;
+
+const PositionRelative = styled("div")`
+  position: relative;
+`;
+
+const HoursButton = styled("button")`
+  border: none;
+  background-color: unset;
+  cursor: pointer;
 `;
 
 const DayShowComponent = ({
@@ -104,21 +131,18 @@ const DayShowComponent = ({
     return temp;
   });
 
+  //  для выпадающее меню (выбор времени для события)
+  const [showTimePicker, setShowTimePicker] = useState(false);
+
+  const setTimeForEvent = (index) => {
+    setShowTimePicker(false);
+    const time = moment.unix(+selectedEvent.date).hour(index).format("X")
+    changeEventHandler(time, "date")
+  };
+
   return (
     <DayShowWrapper>
       <EventsListWrapper>
-        {/* <EventListWrapper>
-          {eventsList.map((event) => (
-            <EventListItemWrapper key={event.id}>
-              <EventItemWrapper
-                onClick={() => openFormHandler("Update", event)}
-              >
-                {event.title}
-              </EventItemWrapper>
-            </EventListItemWrapper>
-          ))}
-        </EventListWrapper> */}
-
         <ScaleWrapper>
           {hoursCells.map((eventsList, index) => (
             <ScaleCellWrapper>
@@ -142,6 +166,7 @@ const DayShowComponent = ({
       </EventsListWrapper>
 
       <EventFormWrapper>
+        {/* заголовок заметки */}
         {selectedEvent ? (
           <div>
             <EventTitle
@@ -149,6 +174,37 @@ const DayShowComponent = ({
               onChange={(e) => changeEventHandler(e.target.value, "title")}
               placeholder="Title"
             />
+
+            {/* дата */}
+            <SelectEventTimeWrapper>
+              <PositionRelative>
+                <button>
+                  {moment
+                    .unix(Number(selectedEvent.date))
+                    .format("dddd, D MMMM")}
+                </button>
+              </PositionRelative>
+              <PositionRelative>
+                <button onClick={() => setShowTimePicker((prev) => !prev)}>
+                  {moment.unix(Number(selectedEvent.date)).format("HH:mm")}
+                </button>
+
+                {/* выпадающее меню */}
+                {showTimePicker && (
+                  <ListOfHours>
+                    {[...new Array(HOURS_IN_DAY)].map((_, index) => (
+                      <li>
+                        <HoursButton onClick={() => setTimeForEvent(index)}>
+                          {`${index}`.padStart(2, "0")}:00
+                        </HoursButton>
+                      </li>
+                    ))}
+                  </ListOfHours>
+                )}
+              </PositionRelative>
+            </SelectEventTimeWrapper>
+
+            {/* тело заметки */}
             <EventBody
               value={selectedEvent.description}
               onChange={(e) =>
@@ -156,6 +212,8 @@ const DayShowComponent = ({
               }
               placeholder="Description"
             />
+
+            {/* кнопки создать и отменить */}
             <ButtonsWrapper>
               <ButtonWrapper onClick={closeFormHandler}>Cancel</ButtonWrapper>
               <ButtonWrapper onClick={eventFetchHandler}>
@@ -172,7 +230,9 @@ const DayShowComponent = ({
         ) : (
           <>
             <div>
-              <ButtonCreateEventWrapper onClick={() => openFormHandler("Create", null, today)}>
+              <ButtonCreateEventWrapper
+                onClick={() => openFormHandler("Create", null, today)}
+              >
                 Create new event
               </ButtonCreateEventWrapper>
             </div>
