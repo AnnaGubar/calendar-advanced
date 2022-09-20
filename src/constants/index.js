@@ -10,6 +10,8 @@ const DISPLAY_MODE_DAY = "day";
 
 const HOURS_IN_DAY = 24;
 
+const ONE_SECOND = 1000;
+
 export {
   TOTAL_DAYS,
   DAYS_IN_WEEK,
@@ -17,4 +19,5 @@ export {
   DISPLAY_MODE_MONTH,
   DISPLAY_MODE_DAY,
   HOURS_IN_DAY,
+  ONE_SECOND,
 };

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import moment from "moment";
-import { useState } from "react";
-import { HOURS_IN_DAY } from "../../constants";
+import { useState, useEffect } from "react";
+import { HOURS_IN_DAY, ONE_SECOND } from "../../constants";
 import {
   ButtonsWrapper,
   ButtonWrapper,
@@ -9,7 +9,10 @@ import {
   EventItemWrapper,
   EventTitle,
 } from "../../containers/StyledComponents";
-import { isDayContainCurrentEvent } from "../../helpers";
+import {
+  isDayContainCurrentEvent,
+  isDayContainCurrentTimestamp,
+} from "../../helpers";
 
 const DayShowWrapper = styled("div")`
   display: flex;
@@ -43,6 +46,7 @@ const NoEventMsg = styled("div")`
 `;
 
 const ScaleWrapper = styled("div")`
+  position: relative;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -83,6 +87,10 @@ const SelectEventTimeWrapper = styled("div")`
   display: flex;
 `;
 
+const PositionRelative = styled("div")`
+  position: relative;
+`;
+
 const ListOfHours = styled("ul")`
   list-style-type: none;
   margin: 0;
@@ -95,14 +103,21 @@ const ListOfHours = styled("ul")`
   background-color: rgb(239, 239, 239);
 `;
 
-const PositionRelative = styled("div")`
-  position: relative;
-`;
 
 const HoursButton = styled("button")`
   border: none;
   background-color: unset;
   cursor: pointer;
+`;
+
+const RedLine = styled("div")`
+  position: absolute;
+  height: 1px;
+  left: 0;
+  right: 0;
+  /* top: 60%; */
+  top: ${(props) => props.position}%;
+  background-color: #f33;
 `;
 
 const DayShowComponent = ({
@@ -131,19 +146,46 @@ const DayShowComponent = ({
     return temp;
   });
 
-  //  для выпадающее меню (выбор времени для события)
+  // ◼ выпадающее меню (выбор времени для события)
   const [showTimePicker, setShowTimePicker] = useState(false);
 
   const setTimeForEvent = (index) => {
     setShowTimePicker(false);
-    const time = moment.unix(+selectedEvent.date).hour(index).format("X")
-    changeEventHandler(time, "date")
+    const time = moment
+      .unix(+selectedEvent.date)
+      .hour(index)
+      .format("X");
+    changeEventHandler(time, "date");
   };
+
+  // ◼ красная линия текущего времени
+  const getRedLinePosition = () => {
+    let timeDifference =
+      ((moment().format("X") - today.format("X")) / 86400) * 100;
+    // console.log(timeDifference);
+    return timeDifference;
+  };
+
+  const [, setCounter] = useState(0);
+
+  // динамическая отрисовка линии
+  useEffect(() => {
+    const id = setInterval(() => {
+      setCounter((prev) => prev + 1);
+    }, ONE_SECOND);
+
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <DayShowWrapper>
       <EventsListWrapper>
         <ScaleWrapper>
+          {/* красная линия текущего времени */}
+          {isDayContainCurrentTimestamp(moment().format("X"), today) && (
+            <RedLine position={getRedLinePosition()} />
+          )}
+
           {hoursCells.map((eventsList, index) => (
             <ScaleCellWrapper>
               <ScaleCellTimeWrapper>
@@ -175,15 +217,18 @@ const DayShowComponent = ({
               placeholder="Title"
             />
 
-            {/* дата */}
+            {/* кнопки с выпадающим меню */}
             <SelectEventTimeWrapper>
-              <PositionRelative>
+              {/* кнопка даты */}
+              {/* <PositionRelative>
                 <button>
                   {moment
                     .unix(Number(selectedEvent.date))
                     .format("dddd, D MMMM")}
                 </button>
-              </PositionRelative>
+              </PositionRelative> */}
+
+              {/* кнопка времени */}
               <PositionRelative>
                 <button onClick={() => setShowTimePicker((prev) => !prev)}>
                   {moment.unix(Number(selectedEvent.date)).format("HH:mm")}

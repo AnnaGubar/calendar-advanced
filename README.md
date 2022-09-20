@@ -130,3 +130,9 @@ body: JSON.stringify(event)})
 - DayShowComponent -> `Number(moment.unix(Number(selectedEvent.date)).format("H"))`
 - создать выпадающее меню (выбор времени)
 - `moment.unix(+selectedEvent.date).hour(index).format("X")` - метод hour() устанавливает час 
+
+26. Текущее время в DayShowConponent
+  - в стилях RedLine -> динамический X `top: x%;`
+  - 86400 - кол-во секунд в сутках
+  - `const getRedLinePosition = () => ((moment().format("x") - today.format("x")) / 86400) * 100;`
+  - чтобы линия динамически меняла положение использовать useEffect
