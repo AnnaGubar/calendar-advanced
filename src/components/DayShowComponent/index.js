@@ -91,18 +91,29 @@ const PositionRelative = styled("div")`
   position: relative;
 `;
 
+const TimeButton = styled("button")`
+  width: 62px;
+  border: none;
+  color: #1f7a60;
+  border: 1px solid #1f7a60;
+  background-color: transparent;
+  cursor: pointer;
+
+  &:hover {
+    color: #21b88d;
+    border: 1px solid #21b88d;
+  }
+`;
+
 const ListOfHours = styled("ul")`
   list-style-type: none;
   margin: 0;
   padding: 0;
-  height: 60px;
+  height: 140px;
   overflow-y: scroll;
-  color: #000;
   position: absolute;
-  left: 2px;
-  background-color: rgb(239, 239, 239);
+  background-color: rgba(239, 239, 239, 0.8);
 `;
-
 
 const HoursButton = styled("button")`
   border: none;
@@ -230,9 +241,9 @@ const DayShowComponent = ({
 
               {/* кнопка времени */}
               <PositionRelative>
-                <button onClick={() => setShowTimePicker((prev) => !prev)}>
+                <TimeButton onClick={() => setShowTimePicker((prev) => !prev)}>
                   {moment.unix(Number(selectedEvent.date)).format("HH:mm")}
-                </button>
+                </TimeButton>
 
                 {/* выпадающее меню */}
                 {showTimePicker && (
